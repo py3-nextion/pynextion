@@ -9,6 +9,7 @@ from pynextion.events import (
     NumberHeadEvent
 )
 from pynextion.constants import Return
+from pynextion.int_tools import limits
 
 
 def test_event_touch_constants():
@@ -91,7 +92,8 @@ def test_NumberHeadEvent():
     msg = [0x71, 0xff, 0xff, 0xff, 0x7f, 0xff, 0xff, 0xff]
     evt = MsgEvent.parse(msg)
     assert isinstance(evt, NumberHeadEvent)
-    # assert evt.value == typemax(Int32)  # ToDo
+    min_val, max_val = limits(True, 32)  # limits of int32 (signed int 32 bits)
+    assert evt.value == max_val
 
     msg = [0x71, 0xfe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]
     evt = MsgEvent.parse(msg)
@@ -102,4 +104,5 @@ def test_NumberHeadEvent():
     msg = [0x71, 0x00, 0x00, 0x00, 0x80, 0xff, 0xff, 0xff]
     evt = MsgEvent.parse(msg)
     assert evt.value == 0x80000000
-    # assert evt.signed_value == typemin(Int32)  # ToDo
+    min_val, max_val = limits(True, 32)  # limits of int32 (signed int 32 bits)
+    assert evt.signed_value == min_val

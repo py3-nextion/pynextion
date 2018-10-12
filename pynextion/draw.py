@@ -6,6 +6,7 @@ from .constants import (
     FORECOLOR_DEFAULT
 )
 from .resources import FONT_DEFAULT
+from .int_tools import assert_integers_in_range
 
 
 def _init_colour(colour):
@@ -45,6 +46,7 @@ def rectangle(nexSerial, x1, y1, x2, y2, colour=None, mode=Background.NOBACKCOLO
     If `mode` is set to `SOLIDCOLOUR`
     `colour` is used for fill colour.
     """
+    assert_integers_in_range((x1, y1, x2, y2), False, 16)  # uint16
     colour = _init_colour(colour)
     if mode == Background.NOBACKCOLOUR:
         return nexSerial.send("draw %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour))
@@ -67,7 +69,7 @@ def circle(nexSerial, x, y, r, colour=None, mode=Background.NOBACKCOLOUR):
     If `mode` is set to `SOLIDCOLOUR`
     `colour` is used for fill colour.
     """
-    # x, y, r = UInt16.((x, y, r))
+    assert_integers_in_range((x, y, r), False, 16)  # uint16
     colour = _init_colour(colour)
     if mode == Background.NOBACKCOLOUR:
         return nexSerial.send("cir %s,%s,%s,%s" % (x, y, r, colour))
@@ -97,7 +99,7 @@ def xstr(nexSerial, s, x, y, w, h,
     - `ycenter`: Vertical alignment (0 is upper-aligned, 1 is centered, 2 is lower-aligned);
     - `sta`: Background fill(0-crop image;1-solid color;2-Image; 3-No backcolor, when set sta as Crop Image or Image, backcolor means image ID);
     """
-    # x, y, w, h = UInt16.((x, y, w, h))
+    assert_integers_in_range((x, y, w, h), False, 16)  # uint16
     fontid = font.id
     xcenter = xcenter.value
     ycenter = ycenter.value
@@ -110,7 +112,7 @@ def line(nexSerial, x1, y1, x2, y2, colour=None):
     Draw a line in colour `colour` between
     the coordinate (`x1`, `y1`) and the coordinate (`x2`, `y2`)
     """
-    # x1, y1, x2, y2 = UInt16.((x1, y1, x2, y2))
+    assert_integers_in_range((x1, y1, x2, y2), False, 16)  # uint16
     colour = _init_colour(colour)
     return nexSerial.send("line %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour))
 
@@ -120,7 +122,7 @@ def picture(nexSerial, x, y, pic, w=None, h=None, x0=None, y0=None):
     Display the Picture pic (should have a id attribute) in resource file
     at the coordinate (`x`, `y`)
     """
-    # x, y = UInt16.((x, y))
+    assert_integers_in_range((x, y), False, 16)  # uint16
     picid = pic.id
     if w is None and x0 is None:
         return nexSerial.send("pic %s,%s,%s" % (x, y, picid))
