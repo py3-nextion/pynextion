@@ -33,7 +33,7 @@ def test_number(port):
     n = -2
     nexNumber.value = n
     time.sleep(1)
-    assert nexNumber.value == n  # ToFix
+    assert nexNumber.value == n
 
     min_val, max_val = limits(True, 32)
 
@@ -45,6 +45,6 @@ def test_number(port):
     n = min_val
     nexNumber.value = n
     time.sleep(1)
-    assert nexNumber.value == n  # ToFix
+    assert nexNumber.value == n
 
     nexSerial.close()
