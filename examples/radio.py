@@ -6,7 +6,7 @@ from pynextion.widgets import NexRadio
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexRadio(port):
+def test_radio(port):
     nexSerial = PySerialNex(port)
 
     nexRadio0 = NexRadio(nexSerial, "r0", cid=8)

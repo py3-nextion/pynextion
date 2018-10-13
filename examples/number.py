@@ -7,7 +7,7 @@ from pynextion.constants import Colour
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexNumber(port):
+def test_number(port):
     nexSerial = PySerialNex(port)
 
     nexNumber = NexNumber(nexSerial, "n0", cid=1)

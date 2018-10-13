@@ -29,5 +29,20 @@ Please follow the following wiring:
 
     If you don't know what you are doing, it's maybe safer not to try!
 
+## Running
+
+### unit tests
+```bash
+$ pytest -s tests
+```
+
+### examples
+```bash
+$ pytest -s examples/draw.py
+```
+
+Default port is `/dev/ttyUSB0` and is set in `examples/config.py`.
+
+
 ## Other Python Nextion libraries
 - https://github.com/python-nextion/pynextion (and forks)

@@ -5,10 +5,12 @@ from pynextion import PySerialNex
 from pynextion.widgets import NexWaveform
 from pynextion.constants import Colour
 import random
+import datetime
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_pages(port):
+@pytest.mark.parametrize("delay", [10])
+def test_waveform(port, delay):
     nexserial = PySerialNex(port)
     nexWaveform = NexWaveform(nexserial, "s0", cid=2)
 
@@ -38,10 +40,13 @@ def test_pages(port):
     # channel.append([123, 133, 143, 153, 163, 173, 183])  # (addt)
 
     vals = [51 * x for x in range(1, 5)]
+    dt_start = datetime.datetime.utcnow()
     while True:
         for ch in range(nb_channels):
             channel = nexWaveform.channels[ch]
             val = vals[ch]
             channel.append(val)
             vals[ch] = int(vals[ch] + 2 * random.uniform(-1, 1))
+        if datetime.datetime.utcnow() - dt_start > datetime.timedelta(seconds=delay):
+            break
         time.sleep(0.01)

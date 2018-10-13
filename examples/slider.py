@@ -8,7 +8,7 @@ from pynextion.constants import Colour
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexSlider(port):
+def test_slider(port):
     nexSerial = PySerialNex(port)
 
     nexSlider = NexSlider(nexSerial, "h0", cid=4)

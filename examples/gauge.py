@@ -11,6 +11,8 @@ from pynextion.constants import Colour
 def test_gauge(port):
     nexSerial = PySerialNex(port)
 
+    nexSerial.send("page pg_gauge")
+
     nexGauge = NexGauge(nexSerial, "z0", cid=3)
 
     nexGauge.backcolor = Colour.WHITE

@@ -6,7 +6,7 @@ from pynextion.widgets import NexPage
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_pages(port):
+def test_page(port):
     nexserial = PySerialNex(port)
     nexpages = []
     pages_nb = 22

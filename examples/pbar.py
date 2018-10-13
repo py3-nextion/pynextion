@@ -7,7 +7,7 @@ from pynextion.constants import Colour
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexProgressBar(port):
+def test_progressbar(port):
     nexSerial = PySerialNex(port)
 
     nexProgressBar = NexProgressBar(nexSerial, "j0", cid=1)
