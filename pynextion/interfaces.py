@@ -70,7 +70,7 @@ class INumericalSignedValued(NxInterface):
 class IBooleanValued(NxInterface):
     @property
     def value(self):
-        # return bool(self.get_nex_number_property("val"))
+        # return bool(self.get_nex_number_property("val", False, 32))
         return self._get_nex_boolean_property("val")
 
     @value.setter
@@ -92,7 +92,7 @@ class IStringValued(NxInterface):
 class IColourable(NxInterface):
     @property
     def backcolor(self):
-        return self._get_nex_number_property("bco")
+        return self._get_nex_number_property("bco", False, 32)
 
     @backcolor.setter
     def backcolor(self, color):
@@ -100,7 +100,7 @@ class IColourable(NxInterface):
 
     @property
     def forecolor(self):
-        return self._get_nex_number_property("pco")
+        return self._get_nex_number_property("pco", False, 32)
 
     @forecolor.setter
     def forecolor(self, color):
@@ -113,7 +113,7 @@ class AlignmentDirection(NxInterface):
 
     @property
     def vertical(self):
-        return Alignment.Vertical(self._get_nex_number_property("ycen"))
+        return Alignment.Vertical(self._get_nex_number_property("ycen", False, 32))
 
     @vertical.setter
     def vertical(self, value):
@@ -122,7 +122,7 @@ class AlignmentDirection(NxInterface):
 
     @property
     def horizontal(self):
-        return Alignment.Horizontal(self._get_nex_number_property("xcen"))
+        return Alignment.Horizontal(self._get_nex_number_property("xcen", False, 32))
 
     @horizontal.setter
     def horizontal(self, value):
@@ -133,7 +133,7 @@ class AlignmentDirection(NxInterface):
 class IFontStyleable(NxInterface):
     @property
     def font(self):
-        return self._get_nex_number_property("font")
+        return self._get_nex_number_property("font", False, 32)
 
     @font.setter
     def font(self, value):
@@ -148,7 +148,7 @@ class IFontStyleable(NxInterface):
 class IPicturable(NxInterface):
     @property
     def picture(self):
-        return self._get_nex_number_property("pic")
+        return self._get_nex_number_property("pic", False, 32)
 
     @picture.setter
     def picture(self, value):
@@ -175,7 +175,7 @@ class IViewable(NxInterface):
 class IHeightable(NxInterface):
     @property
     def height(self):
-        return self._get_nex_number_property("hig")
+        return self._get_nex_number_property("hig", False, 32)
 
     @height.setter
     def height(self, value):
@@ -185,7 +185,7 @@ class IHeightable(NxInterface):
 class IWidthable(NxInterface):
     @property
     def width(self):
-        return self._get_nex_number_property("wid")
+        return self._get_nex_number_property("wid", False, 32)
 
     @width.setter
     def width(self, value):

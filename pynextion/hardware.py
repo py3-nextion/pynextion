@@ -65,7 +65,7 @@ class AbstractSerialNex:
 
     @property
     def current_page(self):
-        return self.get_nex_number_command("get page")
+        return self.get_nex_number_command("get page", False, 32)
 
     def close(self):
         return self.sp.close()
