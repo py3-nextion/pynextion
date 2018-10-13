@@ -26,10 +26,10 @@ class NxInterface:
         cmd = "%s.%s=%s" % (name, prop, value)
         return self._nid._nexserial.set_nex_bool_command(cmd)
 
-    def _get_nex_number_property(self, prop):
+    def _get_nex_number_property(self, prop, signed, bit_size):
         name = self._nid.name
         cmd = "get %s.%s" % (name, prop)
-        return self._nid._nexserial.get_nex_number_command(cmd)
+        return self._nid._nexserial.get_nex_number_command(cmd, signed, bit_size)
 
     def _set_nex_number_property(self, prop, value):
         name = self._nid.name
@@ -47,10 +47,20 @@ class NxInterface:
         return self._nid._nexserial.set_nex_string_command(cmd)
 
 
-class INumericalValued(NxInterface):
+class INumericalUnsignedValued(NxInterface):
     @property
     def value(self):
-        return self._get_nex_number_property("val")
+        return self._get_nex_number_property("val", False, 32)
+
+    @value.setter
+    def value(self, value):
+        self._set_nex_number_property("val", value)
+
+
+class INumericalSignedValued(NxInterface):
+    @property
+    def value(self):
+        return self._get_nex_number_property("val", True, 32)
 
     @value.setter
     def value(self, value):

@@ -4,7 +4,8 @@ from .interfaces import (
     NxInterface,
     IViewable,
     IBooleanValued,
-    INumericalValued,
+    INumericalUnsignedValued,
+    INumericalSignedValued,
     IStringValued,
     IFontStyleable,
     IColourable,
@@ -31,7 +32,7 @@ class NexDualStateButton(IWidget, IViewable, IBooleanValued, IColourable, ITouch
     pass
 
 
-class NexGauge(IWidget, IViewable, INumericalValued, IColourable, ITouchable):
+class NexGauge(IWidget, IViewable, INumericalUnsignedValued, IColourable, ITouchable):
     pass
 
 
@@ -39,7 +40,7 @@ class NexHotspot(IWidget, ITouchable):
     pass
 
 
-class NexNumber(IWidget, IViewable, INumericalValued, IFontStyleable, IColourable, ITouchable):
+class NexNumber(IWidget, IViewable, INumericalSignedValued, IFontStyleable, IColourable, ITouchable):
     pass
 
 
@@ -59,7 +60,7 @@ class NexPicture(IWidget, IViewable, IPicturable):
     pass
 
 
-class NexProgressBar(IWidget, IViewable, INumericalValued, IColourable, ITouchable):
+class NexProgressBar(IWidget, IViewable, INumericalUnsignedValued, IColourable, ITouchable):
     pass
 
 
@@ -80,7 +81,7 @@ class NexSliderCursor(IWidget, IWidthable, IHeightable):
         self._nid = nid
 
 
-class NexSlider(IWidget, IViewable, INumericalValued, IColourable, ITouchable):
+class NexSlider(IWidget, IViewable, INumericalUnsignedValued, IColourable, ITouchable):
     @property
     def cursor(self):
         return NexSliderCursor(self._nid)
