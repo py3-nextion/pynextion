@@ -7,7 +7,7 @@ from pynextion.resources import Picture
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexPicture(port):
+def test_picture(port):
     nexSerial = PySerialNex(port)
 
     nexPicture = NexPicture(nexSerial, "p0", cid=1)

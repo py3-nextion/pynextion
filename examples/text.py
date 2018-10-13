@@ -9,7 +9,7 @@ from pynextion.resources import Font
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexSlider(port):
+def test_text(port):
     nexSerial = PySerialNex(port)
 
     print("Init")

@@ -6,7 +6,7 @@ from pynextion.widgets import NexCheckbox
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexCheckbox(port):
+def test_checkbox(port):
     nexSerial = PySerialNex(port)
 
     nexCheckbox0 = NexCheckbox(nexSerial, "c0", cid=4)

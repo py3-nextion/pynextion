@@ -6,7 +6,7 @@ from pynextion.widgets import NexQRcode, NexText
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
-def test_NexQRCode(port):
+def test_qrcode(port):
     nexSerial = PySerialNex(port)
 
     nexQRcode = NexQRcode(nexSerial, "qr0", cid=1)
