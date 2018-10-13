@@ -4,6 +4,7 @@ import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexNumber
 from pynextion.constants import Colour
+from pynextion.int_tools import limits
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
@@ -29,24 +30,19 @@ def test_number(port):
     nexNumber.forecolor = Colour.RED
     time.sleep(1)
 
-    """
-    n = typemax(Int32)
-    # how to get max and min val of C integers (from Python)
-    # see also https://stackoverflow.com/questions/9860588/maximum-value-for-long-integer/9860812
-
-    nexNumber.value = n
-    time.sleep(1)
-    assert nexNumber.value == n
-    """
-
-    """
-    n = typemin(Int32)
-    nexNumber.value = n
-    time.sleep(1)
-    assert nexNumber.value == n
-    """
-
     n = -2
+    nexNumber.value = n
+    time.sleep(1)
+    assert nexNumber.value == n
+
+    min_val, max_val = limits(True, 32)
+
+    n = max_val
+    nexNumber.value = n
+    time.sleep(1)
+    assert nexNumber.value == n
+
+    n = min_val
     nexNumber.value = n
     time.sleep(1)
     assert nexNumber.value == n

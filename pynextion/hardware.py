@@ -47,8 +47,12 @@ class AbstractSerialNex:
     def set_nex_string_command(self, cmd):
         return self.send(cmd)
 
-    def get_nex_number_command(self, cmd):
-        return NumberHeadEvent.parse(self.send(cmd)).value
+    def get_nex_number_command(self, cmd, signed, bit_size):
+        evt = NumberHeadEvent.parse(self.send(cmd))
+        if signed:
+            return evt.signed_value
+        else:
+            return evt.value
 
     def set_nex_number_command(self, cmd):
         return self.send(cmd)
@@ -61,7 +65,7 @@ class AbstractSerialNex:
 
     @property
     def current_page(self):
-        return self.get_nex_number_command("get page")
+        return self.get_nex_number_command("get page", False, 32)
 
     def close(self):
         return self.sp.close()
