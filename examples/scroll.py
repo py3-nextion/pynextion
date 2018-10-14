@@ -9,12 +9,14 @@ from pynextion.widgets import NexPage, NexScrollText
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_scroll(port):
     nexSerial = PySerialNex(port)
-    # nexSerial.write("page pg_scroll")
 
     nexPage = NexPage(nexSerial, "pg_scroll", pid=5)
-    nexPage.show()
 
     nexScrollText = NexScrollText(nexSerial, "g0", pid=1)
+
+    # nexSerial.write("page pg_scroll")
+    nexPage.show()
+
     msg = "Hello Nextion!"
     nexScrollText.text = msg
     assert nexScrollText.text == msg

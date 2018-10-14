@@ -2,18 +2,20 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexCheckbox
+from pynextion.widgets import NexPage, NexCheckbox
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_checkbox(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_dsb_chk_rad", pid=13)
+
     nexCheckbox0 = NexCheckbox(nexSerial, "c0", cid=4)
     nexCheckbox1 = NexCheckbox(nexSerial, "c1", cid=5)
     nexCheckbox2 = NexCheckbox(nexSerial, "c2", cid=7)
 
-    nexSerial.send("page pg_dsb_chk_rad")
+    nexPage.show()
 
     nexCheckbox0.value = False
     nexCheckbox1.value = False

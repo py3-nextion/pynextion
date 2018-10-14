@@ -2,7 +2,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexWaveform
+from pynextion.widgets import NexPage, NexWaveform
 from pynextion.constants import Colour
 import random
 import datetime
@@ -11,11 +11,14 @@ import datetime
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 @pytest.mark.parametrize("delay", [10])
 def test_waveform(port, delay):
-    nexserial = PySerialNex(port)
-    nexWaveform = NexWaveform(nexserial, "s0", cid=2)
+    nexSerial = PySerialNex(port)
 
-    nexserial.send("cls WHITE")
-    nexserial.send("page pg_waveform")
+    nexPage = NexPage(nexSerial, "pg_waveform", pid=12)
+
+    nexWaveform = NexWaveform(nexSerial, "s0", cid=2)
+
+    nexSerial.send("cls WHITE")
+    nexPage.show()
 
     nexWaveform.grid.width = 20
     nexWaveform.grid.height = 20

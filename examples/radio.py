@@ -2,18 +2,20 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexRadio
+from pynextion.widgets import NexPage, NexRadio
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_radio(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_dsb_chk_rad", pid=13)
+
     nexRadio0 = NexRadio(nexSerial, "r0", cid=8)
     nexRadio1 = NexRadio(nexSerial, "r1", cid=9)
     nexRadio2 = NexRadio(nexSerial, "r2", cid=10)
 
-    nexSerial.send("page pg_dsb_chk_rad")
+    nexPage.show()
 
     nexRadio0.value = False
     nexRadio1.value = False

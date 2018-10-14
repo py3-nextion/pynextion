@@ -3,7 +3,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexSlider
+from pynextion.widgets import NexPage, NexSlider
 from pynextion.constants import Colour
 
 
@@ -11,9 +11,12 @@ from pynextion.constants import Colour
 def test_slider(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_slider", pid=11)
+
     nexSlider = NexSlider(nexSerial, "h0", cid=4)
 
-    nexSerial.send("page pg_slider")
+    nexPage.show()
+
     time.sleep(0.1)
 
     nexSlider.value = 43691  # 0-65535

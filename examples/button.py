@@ -2,7 +2,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexButton, NexNumber
+from pynextion.widgets import NexPage, NexButton, NexNumber
 from pynextion.constants import Colour
 import datetime
 
@@ -12,12 +12,14 @@ import datetime
 def test_button(port, delay):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_but", pid=8)
+
     nexButtonPlus = NexButton(nexSerial, "b0", cid=1)
     nexNumber0 = NexNumber(nexSerial, "n0", cid=2)
     nexButtonMinus = NexButton(nexSerial, "b1", cid=3)
     nexButtonEnter = NexButton(nexSerial, "b2", cid=4)  # noqa: F841
 
-    nexSerial.send("page pg_but")
+    nexPage.show()
 
     nexButtonPlus.backcolor = Colour.GREEN
     nexButtonMinus.backcolor = Colour.RED

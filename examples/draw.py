@@ -11,6 +11,7 @@ from pynextion.resources import (
     Font,
     Picture
 )
+from pynextion.widgets import NexPage
 from pynextion.draw import (
     cls,
     circle,
@@ -30,7 +31,9 @@ IMG_WIDTH, IMG_HEIGHT = 135, 135
 def test_draw(port):
     nexSerial = PySerialNex(port)
 
-    nexSerial.send("page page0")
+    nexPage = NexPage(nexSerial, "page0", pid=0)
+    nexPage.show()
+
     cls(nexSerial, DEFAULT_COLOUR)
 
     def print_several_lines(nexSerial, lcd_width=LCD_WIDTH, color1="WHITE", color2="BLACK"):
