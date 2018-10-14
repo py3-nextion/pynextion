@@ -12,15 +12,23 @@ def test_text(port):
     print("Init")
     nexSerial.init()
 
-    nexPage = nexSerial.components.hook_page("pg_text", pid=2)
-    assert len(list(nexSerial.components.pages)) == 1
-    nexText = nexPage.hook_widget(NexText, "t1", cid=1)
-    assert len(list(nexPage.widgets)) == 1
+    pages = [
+        {
+            'pid': 2, 'name': 'pg_text',
+            'components': [
+                {'type': 'Text', 'cid': 0, 'name': 't0'}
+            ]
+        }
+    ]
+
+    nexSerial.components.read_list(pages)
+    nexPage = nexSerial.components.page(name="pg_text")
 
     nexPage.show()
     time.sleep(1)
 
-    msg = "H. by code"  # Hook
+    nexText = nexPage.widget(name="t1")
+    msg = "H. by data"  # Hook
     nexText.text = msg
 
     nexSerial.close()
