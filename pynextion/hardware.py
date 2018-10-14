@@ -3,7 +3,9 @@ from .events import (
     StringHeadEvent,
     NumberHeadEvent
 )
-
+from .hook import (
+    NexComponents
+)
 
 try:
     import serial
@@ -69,6 +71,10 @@ class AbstractSerialNex:
 
     def close(self):
         return self.sp.close()
+
+    @property
+    def components(self):
+        return NexComponents(self)
 
 
 if _HAS_PYSERIAL:
