@@ -3,7 +3,7 @@ from .objects import (
     PID_DEFAULT
 )
 from .widgets import NexPage
-from .exceptions import NexIdException, NexNameException
+from .exceptions import NexException, NexIdException, NexNameException
 
 
 class NexComponents:
@@ -29,9 +29,9 @@ class NexComponents:
         elif name is None and pid is not None:
             return self.D_PAGES_BY_PID[pid]
         elif name is not None and pid is not None:
-            raise NotImplementedError("name and pid shouldn't be defined both")
+            raise NexException("name and pid shouldn't be defined both")
         else:
-            raise NotImplementedError("name or pid should be defined")
+            raise NexException("name or pid should be defined")
 
     @property
     def pages(self):
