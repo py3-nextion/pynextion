@@ -7,6 +7,13 @@ from pynextion.constants import Colour
 from pynextion.int_tools import limits
 
 
+def sign_color(value, color1=Colour.GREEN, color2=Colour.RED):
+    if value >= 0:
+        return color1
+    else:
+        return color2
+
+
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_number(port):
     nexSerial = PySerialNex(port)
@@ -18,20 +25,22 @@ def test_number(port):
     time.sleep(1)
     nexNumber.value = 1
     time.sleep(1)
-    nexNumber.value = 2
+    n = 2
+    nexNumber.value = n
     nexNumber.backcolor = Colour.RED
     nexNumber.forecolor = Colour.WHITE
 
     time.sleep(1)
-    assert nexNumber.value == 2
+    assert nexNumber.value == n
     time.sleep(1)
     nexNumber.value = 3
     nexNumber.backcolor = Colour.WHITE
-    nexNumber.forecolor = Colour.RED
+    nexNumber.forecolor = sign_color(n)
     time.sleep(1)
 
     n = -2
     nexNumber.value = n
+    nexNumber.forecolor = sign_color(n)
     time.sleep(1)
     assert nexNumber.value == n
 
@@ -39,11 +48,13 @@ def test_number(port):
 
     n = max_val
     nexNumber.value = n
+    nexNumber.forecolor = sign_color(n)
     time.sleep(1)
     assert nexNumber.value == n
 
-    n = min_val
+    n = min_val + 1  # display only "-" is n = min_val
     nexNumber.value = n
+    nexNumber.forecolor = sign_color(n)
     time.sleep(1)
     assert nexNumber.value == n
 

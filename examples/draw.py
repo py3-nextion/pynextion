@@ -23,14 +23,14 @@ from pynextion.draw import (
 
 LCD_WIDTH, LCD_HEIGHT = 480, 320
 DEFAULT_COLOUR = Colour.WHITE
-IMG_WIDTH, IMG_HEIGHT = 200, 135
+IMG_WIDTH, IMG_HEIGHT = 135, 135
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_draw(port):
     nexSerial = PySerialNex(port)
 
-    nexSerial.send("page0")
+    nexSerial.send("page page0")
     cls(nexSerial, DEFAULT_COLOUR)
 
     def print_several_lines(nexSerial, lcd_width=LCD_WIDTH, color1="WHITE", color2="BLACK"):
@@ -112,7 +112,7 @@ def test_draw(port):
     def picture_example(nexSerial, lcd_width=LCD_WIDTH, lcd_height=LCD_HEIGHT, img_width=IMG_WIDTH, img_height=IMG_HEIGHT, delay=0.5):
         x = int(round((lcd_width - img_width) / 2))
         y = int(round((lcd_height - img_height) / 2))
-        for picid in range(5):
+        for picid in range(8):
             picture(nexSerial, x, y, Picture(picid))
             time.sleep(delay)
 

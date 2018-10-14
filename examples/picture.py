@@ -14,7 +14,7 @@ def test_picture(port):
 
     nexSerial.send("page pg_pic")
 
-    for i in range(1, 5):
+    for i in range(1, 8):
         time.sleep(1)
         # nexPicture.picture = i
         nexPicture.picture = Picture(i)
