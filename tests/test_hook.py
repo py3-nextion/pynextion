@@ -4,7 +4,7 @@ from pynextion.widgets import NexText
 from pynextion.exceptions import NexException, NexIdException, NexNameException
 
 
-def test_hook():
+def test_hook_by_code():
     nexSerial = NexSerialMock()
 
     # hook a page to nexSerial
@@ -62,3 +62,49 @@ def test_hook():
     with pytest.raises(NexIdException):
         nexSerial.components.hook_page("pg_num2", pid=7)
     assert len(list(nexSerial.components.pages)) == 2
+
+
+def test_hook_by_data():
+    nexSerial = NexSerialMock()
+
+    pages = [
+        {
+            "pid": 2,
+            "name": "pg_text",
+            "components": [
+                {
+                    "type": "Text",
+                    "cid": 2,
+                    "name": "t0"
+                },
+                {
+                    "type": "Text",
+                    "cid": 3,
+                    "name": "t1"
+                },
+                {
+                    "type": "Text",
+                    "cid": 1,
+                    "name": "t2"
+                }
+            ]
+        }
+    ]
+
+    # read pages/widget from data (pages variable)
+    nexSerial.components.read_list(pages)
+
+    # assert there is correct number of pages
+    assert len(list(nexSerial.components.pages)) == 1
+
+    # get a given page and assert it have correct number of widgets
+    nexPage = nexSerial.components.page(name="pg_text")
+    assert len(list(nexPage.widgets)) == 3
+
+    # get a widget of this page using its name
+    nexText = nexPage.widget(name="t1")
+    assert isinstance(nexText, NexText)
+
+
+# def test_hook_by_json_data():
+#     pass

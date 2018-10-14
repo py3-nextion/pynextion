@@ -4,14 +4,14 @@ from .objects import (
 )
 from .widgets import NexPage
 from .exceptions import NexException, NexIdException, NexNameException
+from .factory import WidgetFactory
 
 
 class NexComponents:
-    D_PAGES_BY_NAME = OrderedDict()
-    D_PAGES_BY_PID = OrderedDict()
-
     def __init__(self, nexserial):
         self.nexserial = nexserial
+        self.D_PAGES_BY_NAME = OrderedDict()
+        self.D_PAGES_BY_PID = OrderedDict()
 
     def hook_page(self, name, pid=PID_DEFAULT):
         if name in self.D_PAGES_BY_NAME.keys():
@@ -38,8 +38,20 @@ class NexComponents:
         for name, page in self.D_PAGES_BY_NAME.items():
             yield page
 
-    def read_list(data):
-        raise NotImplementedError()
+    def read_list(self, data):
+        for d_page in data:
+            pagename = d_page['name']
+            if 'pid' in d_page:
+                pid = d_page['pid']
+            else:
+                pid = PID_DEFAULT
+            page = self.hook_page(pagename, pid=pid)
+            for d_component in d_page['components']:
+                typ = d_component['type']
+                name = d_component['name']
+                cid = d_component['cid']
+                widget_type = WidgetFactory.type(typ)
+                page.hook_widget(widget_type, name, cid=cid)
 
-    def read_json(path_or_buf):
+    def read_json(self, path_or_buf):
         raise NotImplementedError()

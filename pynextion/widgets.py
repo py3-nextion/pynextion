@@ -1,6 +1,11 @@
 from collections import OrderedDict
 
-from .objects import IWidget
+from .objects import (
+    IWidget,
+    NexId,
+    PID_DEFAULT,
+    CID_DEFAULT
+)
 
 from .interfaces import (
     NxInterface,
@@ -22,8 +27,6 @@ from .exceptions import (
     NexNameException,
     NexIdException
 )
-
-from .objects import CID_DEFAULT
 
 
 class NexButton(IWidget, IViewable, IStringValued, IFontStyleable, IColourable, ITouchable):
@@ -54,9 +57,27 @@ class NexNumber(IWidget, IViewable, INumericalSignedValued, IFontStyleable, ICol
     pass
 
 
-class IHookNexWidgets:
-    D_WIDGETS_BY_NAME = OrderedDict()
-    D_WIDGETS_BY_CID = OrderedDict()
+class NexPage(IWidget):
+    def __init__(self, nexserial, name, pid=PID_DEFAULT, cid=CID_DEFAULT):
+        self._nid = NexId(nexserial, name, pid, cid)
+        self.D_WIDGETS_BY_NAME = OrderedDict()
+        self.D_WIDGETS_BY_CID = OrderedDict()
+
+    def show(self):
+        return self._show_by_name()
+
+    def _show_by_id(self):
+        oid = self._nid.pid
+        return self._nid._nexserial.send("page %s" % oid)
+
+    def _show_by_name(self):
+        oid = self._nid.name
+        return self._nid._nexserial.send("page %s" % oid)
+
+    def ishown(self):
+        pid1 = self.current_page
+        pid2 = self.page
+        return pid1 == pid2
 
     def hook_widget(self, widget_type, name, cid=CID_DEFAULT):
         pid = self._nid.pid
@@ -83,24 +104,6 @@ class IHookNexWidgets:
     def widgets(self):
         for name, widget in self.D_WIDGETS_BY_NAME.items():
             yield widget
-
-
-class NexPage(IWidget, IHookNexWidgets):
-    def show(self):
-        return self._show_by_name()
-
-    def _show_by_id(self):
-        oid = self._nid.pid
-        return self._nid._nexserial.send("page %s" % oid)
-
-    def _show_by_name(self):
-        oid = self._nid.name
-        return self._nid._nexserial.send("page %s" % oid)
-
-    def ishown(self):
-        pid1 = self.current_page
-        pid2 = self.page
-        return pid1 == pid2
 
 
 class NexPicture(IWidget, IViewable, IPicturable):

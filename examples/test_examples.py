@@ -12,4 +12,6 @@ from .raw_cmd import test_raw  # noqa
 from .scroll import test_scroll  # noqa
 from .slider import test_slider  # noqa
 from .text import test_text  # noqa
+from .text2 import test_text as test_text2  # noqa
+from .text3 import test_text as test_text3  # noqa
 from .waveform import test_waveform  # noqa
