@@ -52,7 +52,7 @@ class NexComponents:
                 typ = d_component['type']
                 name = d_component['name']
                 cid = d_component['cid']
-                widget = page.widget_factory.create(typ, name, cid=cid)
+                widget = widget_factory.create(typ, name, cid=cid)
                 page.hook_widget(widget)
 
     def read_json(self, path_or_buf):
