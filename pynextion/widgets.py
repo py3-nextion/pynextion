@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from .objects import IWidget
 
 from .interfaces import (
@@ -14,6 +16,14 @@ from .interfaces import (
     IWidthable,
     IHeightable
 )
+
+from .exceptions import (
+    NexException,
+    NexNameException,
+    NexIdException
+)
+
+from .objects import CID_DEFAULT
 
 
 class NexButton(IWidget, IViewable, IStringValued, IFontStyleable, IColourable, ITouchable):
@@ -44,7 +54,38 @@ class NexNumber(IWidget, IViewable, INumericalSignedValued, IFontStyleable, ICol
     pass
 
 
-class NexPage(IWidget):
+class IHookNexWidgets:
+    D_WIDGETS_BY_NAME = OrderedDict()
+    D_WIDGETS_BY_CID = OrderedDict()
+
+    def hook_widget(self, widget_type, name, cid=CID_DEFAULT):
+        pid = self._nid.pid
+        if name in self.D_WIDGETS_BY_NAME.keys():
+            raise NexNameException("name (%s) must be unique" % name)
+        if cid in self.D_WIDGETS_BY_CID.keys():
+            raise NexIdException("cid (%s) must be unique" % cid)
+        widget = widget_type(self._nid._nexserial, name, pid=pid, cid=cid)
+        self.D_WIDGETS_BY_NAME[name] = widget
+        self.D_WIDGETS_BY_CID[cid] = widget
+        return widget
+
+    def widget(self, name=None, cid=None):
+        if name is not None and cid is None:
+            return self.D_WIDGETS_BY_NAME[name]
+        elif name is None and cid is not None:
+            return self.D_WIDGETS_BY_CID[cid]
+        elif name is not None and cid is not None:
+            raise NexException("name and cid shouldn't be defined both")
+        else:
+            raise NexException("name or cid should be defined")
+
+    @property
+    def widgets(self):
+        for name, widget in self.D_WIDGETS_BY_NAME.items():
+            yield widget
+
+
+class NexPage(IWidget, IHookNexWidgets):
     def show(self):
         return self._show_by_name()
 
