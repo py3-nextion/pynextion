@@ -2,7 +2,6 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexText
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
