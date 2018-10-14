@@ -32,6 +32,8 @@ def test_hook():
 
     with pytest.raises(NexNameException):
         nexSerial.components.hook_page("pg_num", pid=8)
+    assert len(list(nexSerial.components.pages)) == 2
 
     with pytest.raises(NexIdException):
         nexSerial.components.hook_page("pg_num2", pid=7)
+    assert len(list(nexSerial.components.pages)) == 2
