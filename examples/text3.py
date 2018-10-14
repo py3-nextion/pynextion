@@ -13,11 +13,24 @@ def test_text(port):
 
     pages = [
         {
-            'pid': 2, 'name': 'pg_text',
-            'components': [
-                {'type': 'Text', 'cid': 2, 'name': 't0'},
-                {'type': 'Text', 'cid': 3, 'name': 't1'},
-                {'type': 'Text', 'cid': 1, 'name': 't2'}
+            "pid": 2,
+            "name": "pg_text",
+            "components": [
+                {
+                    "type": "Text",
+                    "cid": 2,
+                    "name": "t0"
+                },
+                {
+                    "type": "Text",
+                    "cid": 3,
+                    "name": "t1"
+                },
+                {
+                    "type": "Text",
+                    "cid": 1,
+                    "name": "t2"
+                }
             ]
         }
     ]
