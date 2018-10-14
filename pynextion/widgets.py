@@ -46,8 +46,14 @@ class NexNumber(IWidget, IViewable, INumericalSignedValued, IFontStyleable, ICol
 
 class NexPage(IWidget):
     def show(self):
-        # oid = self.nid.name
+        return self._show_by_name()
+
+    def _show_by_id(self):
         oid = self._nid.pid
+        return self._nid._nexserial.send("page %s" % oid)
+
+    def _show_by_name(self):
+        oid = self._nid.name
         return self._nid._nexserial.send("page %s" % oid)
 
     def ishown(self):

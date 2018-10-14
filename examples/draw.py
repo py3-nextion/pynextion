@@ -30,7 +30,7 @@ IMG_WIDTH, IMG_HEIGHT = 200, 135
 def test_draw(port):
     nexSerial = PySerialNex(port)
 
-    nexSerial.send("page0")
+    nexSerial.send("page page0")
     cls(nexSerial, DEFAULT_COLOUR)
 
     def print_several_lines(nexSerial, lcd_width=LCD_WIDTH, color1="WHITE", color2="BLACK"):
