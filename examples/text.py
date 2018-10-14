@@ -3,7 +3,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexText
+from pynextion.widgets import NexPage, NexText
 from pynextion.constants import Colour, Alignment
 from pynextion.resources import Font
 
@@ -16,6 +16,8 @@ def test_text(port):
     nexSerial.init()
 
     print("Create objects")
+    nexPage = NexPage(nexSerial, "pg_text", pid=2)
+
     # nexText = NexText(nexSerial, "t1", pid=2, cid=1)
     # nexText = NexText(nexSerial, "t1")
     nexText = NexText(nexSerial, "t1", cid=1)
@@ -25,7 +27,7 @@ def test_text(port):
 
     time.sleep(1)
 
-    nexSerial.send("page pg_text")
+    nexPage.show()
 
     time.sleep(1)
 

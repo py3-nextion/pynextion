@@ -3,7 +3,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexGauge
+from pynextion.widgets import NexPage, NexGauge
 from pynextion.constants import Colour
 
 
@@ -11,9 +11,11 @@ from pynextion.constants import Colour
 def test_gauge(port):
     nexSerial = PySerialNex(port)
 
-    nexSerial.send("page pg_gauge")
+    nexPage = NexPage(nexSerial, "pg_gauge", pid=10)
 
     nexGauge = NexGauge(nexSerial, "z0", cid=3)
+
+    nexPage.show()
 
     nexGauge.backcolor = Colour.WHITE
     nexGauge.forecolor = Colour.RED

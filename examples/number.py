@@ -2,7 +2,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexNumber
+from pynextion.widgets import NexPage, NexNumber
 from pynextion.constants import Colour
 from pynextion.int_tools import limits
 
@@ -18,9 +18,11 @@ def sign_color(value, color1=Colour.GREEN, color2=Colour.RED):
 def test_number(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_num", pid=7)
+
     nexNumber = NexNumber(nexSerial, "n0", cid=1)
 
-    nexSerial.send("page pg_num")
+    nexPage.show()
 
     time.sleep(1)
     nexNumber.value = 1

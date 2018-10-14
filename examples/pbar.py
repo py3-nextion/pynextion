@@ -2,7 +2,7 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexProgressBar
+from pynextion.widgets import NexPage, NexProgressBar
 from pynextion.constants import Colour
 
 
@@ -10,9 +10,11 @@ from pynextion.constants import Colour
 def test_progressbar(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_pbar", pid=6)
+
     nexProgressBar = NexProgressBar(nexSerial, "j0", cid=1)
 
-    nexSerial.send("page pg_pbar")
+    nexPage.show()
 
     time.sleep(1)
 

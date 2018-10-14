@@ -2,17 +2,19 @@ import pytest
 from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
-from pynextion.widgets import NexQRcode, NexText
+from pynextion.widgets import NexPage, NexQRcode, NexText
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_qrcode(port):
     nexSerial = PySerialNex(port)
 
+    nexPage = NexPage(nexSerial, "pg_qr", pid=9)
+
     nexQRcode = NexQRcode(nexSerial, "qr0", cid=1)
     nexText = NexText(nexSerial, "t1", cid=3)
 
-    nexSerial.send("page pg_qr")
+    nexPage.show()
 
     time.sleep(1)
 
