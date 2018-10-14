@@ -23,6 +23,9 @@ def _format_cmd(cmd):
 
 
 class AbstractSerialNex:
+    def __init__(self):
+        self.components = NexComponents(self)
+
     def write(self, cmd):
         print(cmd)
         cmd = _format_cmd(cmd)
@@ -72,20 +75,17 @@ class AbstractSerialNex:
     def close(self):
         return self.sp.close()
 
-    @property
-    def components(self):
-        return NexComponents(self)
-
 
 if _HAS_PYSERIAL:
     class PySerialNex(AbstractSerialNex):
         def __init__(self, *args, **kwargs):
+            super().__init__()
             self.sp = serial.Serial(*args, **kwargs)
 
 
 class NexSerialMock(AbstractSerialNex):
     def __init__(self, *args, **kwargs):
-        pass
+        super().__init__()
 
     def write(self, cmd):
         pass
