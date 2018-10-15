@@ -24,8 +24,8 @@ def test_qrcode(port):
 
     time.sleep(2)
 
-    # text = "https://github.com/scls19fr/pynextion"
-    text = "http://bit.ly/2vWS75r"
+    # text = "https://github.com/py3-nextion/pynextion"
+    text = "http://bit.ly/2QRZsuV"
     nexText.text = text
     # nexQRcode.textmaxlength = len(text)
     # nexQRcode.textmaxlength = 50
