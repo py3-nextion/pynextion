@@ -6,6 +6,7 @@ from .resources import (
     Font,
     Picture
 )
+from .events import Event
 
 
 class NxInterface:
@@ -193,4 +194,29 @@ class IWidthable(NxInterface):
 
 
 class ITouchable(NxInterface):
-    pass
+    _callback = None
+
+    @property
+    def callback(self):
+        return self._callback
+
+    @callback.setter
+    def callback(self, func):
+        print("set callback %s" % func)
+        self._callback = func
+
+    def process_event(self, pid, cid, event_type):
+        assert isinstance(event_type, Event.Touch)
+
+        if pid != self._nid.pid:
+            return False
+
+        if cid != self._nid.cid:
+            return False
+
+        if event_type in [Event.Touch.Press, Event.Touch.Release]:
+            if self.callback is not None:
+                self.callback(self, event_type)
+                return True
+
+        return False

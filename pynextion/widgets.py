@@ -75,8 +75,8 @@ class NexPage(IWidget):
         return self._nid._nexserial.send("page %s" % oid)
 
     def ishown(self):
-        pid1 = self.current_page
-        pid2 = self.page
+        pid1 = self._nid._nexserial.current_page
+        pid2 = self.pid
         return pid1 == pid2
 
     def hook_widget(self, widget_type, name, cid=CID_DEFAULT):
