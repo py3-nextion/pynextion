@@ -54,8 +54,8 @@ class AbstractSerialNex:
         return self.send(cmd)
 
     def get_nex_number_command(self, cmd, signed, bit_size):
-        data = self.send(cmd)
-        evt = NumberHeadEvent.parse(data)
+        msg = self.send(cmd)
+        evt = NumberHeadEvent.parse(msg)
         if signed:
             return evt.signed_value
         else:
@@ -65,8 +65,8 @@ class AbstractSerialNex:
         return self.send(cmd)
 
     def get_nex_bool_command(self, cmd):
-        data = self.send(cmd)
-        value = NumberHeadEvent.parse(data).value
+        msg = self.send(cmd)
+        value = NumberHeadEvent.parse(msg).value
         return bool(value)
 
     def set_nex_bool_command(self, cmd):
@@ -75,8 +75,8 @@ class AbstractSerialNex:
     @property
     def current_page(self):
         cmd = "sendme"
-        data = self.send(cmd)
-        return CurrentPageIDHeadEvent.parse(data).pid
+        msg = self.send(cmd)
+        return CurrentPageIDHeadEvent.parse(msg).pid
 
     def close(self):
         return self.sp.close()
