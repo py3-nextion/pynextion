@@ -93,6 +93,9 @@ class NexSerialMock(AbstractSerialNex):
     def read(self):
         return None
 
+    def close(self):
+        print("close")
+
 
 """
 # PyBoard 1.1

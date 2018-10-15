@@ -63,6 +63,20 @@ def test_hook_by_code():
         nexSerial.components.hook_page("pg_num2", pid=7)
     assert len(list(nexSerial.components.pages)) == 2
 
+    pages = nexSerial.components.to_list()
+
+    nexSerial.close()
+
+    nexSerial = NexSerialMock()
+    nexSerial.components.read_list(pages)
+    assert len(list(nexSerial.components.pages)) == 2
+
+    pg_text = nexSerial.components.page(name="pg_text")
+    assert len(list(pg_text.widgets)) == 2
+
+    pg_num = nexSerial.components.page(name="pg_num")
+    assert len(list(pg_num.widgets)) == 0
+
 
 def test_hook_by_data():
     nexSerial = NexSerialMock()

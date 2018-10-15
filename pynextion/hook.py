@@ -53,5 +53,11 @@ class NexComponents:
                 widget_type = WidgetFactory.type(typ)
                 page.hook_widget(widget_type, name, cid=cid)
 
+    def to_list(self):
+        data = []
+        for pagename, page in self.D_PAGES_BY_NAME.items():
+            data.append(page.to_dict())
+        return data
+
     def read_json(self, path_or_buf):
         raise NotImplementedError()

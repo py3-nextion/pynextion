@@ -100,6 +100,13 @@ class NexPage(IWidget):
         else:
             raise NexException("name or cid should be defined")
 
+    def to_dict(self):
+        return {
+            "pid": self._nid.pid,
+            "name": self._nid.name,
+            "components": [widget.to_dict() for widget in self.widgets]
+        }
+
     @property
     def widgets(self):
         for name, widget in self.D_WIDGETS_BY_NAME.items():

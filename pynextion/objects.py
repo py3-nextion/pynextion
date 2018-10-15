@@ -25,3 +25,10 @@ class IWidget:
     @property
     def name(self):
         return self._nid.name
+
+    def to_dict(self):
+        return {
+            "cid": self._nid.cid,
+            "name": self._nid.name,
+            "type": self.__class__.__name__.strip("Nex")
+        }
