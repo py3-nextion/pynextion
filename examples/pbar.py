@@ -9,6 +9,7 @@ from pynextion.constants import Colour
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_progressbar(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_pbar", pid=6)
 

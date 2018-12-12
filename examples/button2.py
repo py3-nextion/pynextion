@@ -14,6 +14,7 @@ def callback(sender, event):
 @pytest.mark.parametrize("delay", [20])
 def test_button(port, delay):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_but", pid=8)
     nexButtonEnter = NexButton(nexSerial, "b2", cid=4)

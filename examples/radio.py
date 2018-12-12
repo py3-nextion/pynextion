@@ -8,6 +8,7 @@ from pynextion.widgets import NexPage, NexRadio
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_radio(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_dsb_chk_rad", pid=13)
 

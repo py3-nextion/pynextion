@@ -9,6 +9,7 @@ from pynextion.resources import Picture
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_picture(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_pic", pid=3)
 

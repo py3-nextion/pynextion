@@ -8,6 +8,7 @@ from pynextion.widgets import NexPage, NexQRcode, NexText
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_qrcode(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_qr", pid=9)
 

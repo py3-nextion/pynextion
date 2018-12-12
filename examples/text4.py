@@ -8,6 +8,7 @@ import json
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_text(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     data = """[
     {

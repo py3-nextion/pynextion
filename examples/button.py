@@ -11,6 +11,7 @@ import datetime
 @pytest.mark.parametrize("delay", [20])
 def test_button(port, delay):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_but", pid=8)
 

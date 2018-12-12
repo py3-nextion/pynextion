@@ -30,6 +30,7 @@ IMG_WIDTH, IMG_HEIGHT = 135, 135
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_draw(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "page0", pid=0)
     nexPage.show()

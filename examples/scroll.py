@@ -9,6 +9,7 @@ from pynextion.widgets import NexPage, NexScrollText
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_scroll(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_scroll", pid=5)
 

@@ -8,6 +8,7 @@ from pynextion.widgets import NexPage, NexCheckbox
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_checkbox(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_dsb_chk_rad", pid=13)
 

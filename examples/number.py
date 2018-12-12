@@ -17,6 +17,7 @@ def sign_color(value, color1=Colour.GREEN, color2=Colour.RED):
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_number(port):
     nexSerial = PySerialNex(port)
+    nexSerial.init()
 
     nexPage = NexPage(nexSerial, "pg_num", pid=7)
 
