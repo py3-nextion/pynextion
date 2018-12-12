@@ -30,8 +30,9 @@ class AbstractSerialNex:
         self.components = NexComponents(self)
 
     def write(self, cmd):
-        print(cmd)
+        print("cmd --> %s" % cmd)
         cmd = _format_cmd(cmd)
+        print("cmd --> %s" % cmd)
         return self.sp.write(cmd)
 
     def init(self):
@@ -39,10 +40,8 @@ class AbstractSerialNex:
         # mode = Return.Mode.SUCCESS_ONLY  # production setting
         # mode = Return.Mode.FAIL_ONLY  # default screen setting
         mode = Return.Mode.ALWAYS  # for debug
-        msg1 = self.set_cmd_response_mode(mode)
-        ret1 = MsgEvent.parse(msg1)
-        msg2 = self.send("page 0")
-        ret2 = MsgEvent.parse(msg2)
+        ret1 = self.set_cmd_response_mode(mode)
+        ret2 = self.send("page 0")
         if mode in [Return.Mode.ALWAYS, Return.Mode.SUCCESS_ONLY]:
             return ret1.issuccess() and ret2.issuccess()
         elif mode in [Return.Mode.FAIL_ONLY, Return.Mode.NO_RETURN]:
@@ -57,7 +56,12 @@ class AbstractSerialNex:
 
     def reset(self):
         cmd = "rest"
-        return self.send(cmd)
+        # ret = self.send(cmd)
+        self.write(cmd)
+        time.sleep(1)
+        msg = self.read_all()
+        assert msg == b'\x00\x00\x00\xff\xff\xff\x88\xff\xff\xff', "rest returned %s" % msg
+        return True
 
     def read_all(self):
         return self.sp.read_all()
@@ -65,17 +69,23 @@ class AbstractSerialNex:
     def send(self, cmd):
         self.write(cmd)
         time.sleep(0.1)
-        return self.read_all()
+        msg = self.read_all()
+        print("msg <-- %s" % msg)
+        evt = MsgEvent.parse(msg)
+        print("msg <-- %s" % evt)
+        return evt
 
     def get_nex_string_command(self, cmd):
-        return StringHeadEvent.parse(self.send(cmd)).value
+        evt = self.send(cmd)
+        assert isinstance(evt, StringHeadEvent)
+        return evt.value
 
     def set_nex_string_command(self, cmd):
         return self.send(cmd)
 
     def get_nex_number_command(self, cmd, signed, bit_size):
-        msg = self.send(cmd)
-        evt = NumberHeadEvent.parse(msg)
+        evt = self.send(cmd)
+        assert isinstance(evt, NumberHeadEvent)
         if signed:
             return evt.signed_value
         else:
@@ -85,9 +95,9 @@ class AbstractSerialNex:
         return self.send(cmd)
 
     def get_nex_bool_command(self, cmd):
-        msg = self.send(cmd)
-        value = NumberHeadEvent.parse(msg).value
-        return bool(value)
+        evt = self.send(cmd)
+        assert isinstance(evt, NumberHeadEvent)
+        return bool(evt.value)
 
     def set_nex_bool_command(self, cmd):
         return self.send(cmd)
@@ -95,8 +105,9 @@ class AbstractSerialNex:
     @property
     def current_page(self):
         cmd = "sendme"
-        msg = self.send(cmd)
-        return CurrentPageIDHeadEvent.parse(msg).pid
+        evt = self.send(cmd)
+        assert isinstance(evt, CurrentPageIDHeadEvent)
+        return evt.pid
 
     def close(self):
         return self.sp.close()
@@ -104,7 +115,7 @@ class AbstractSerialNex:
     def poll(self):
         print("poll")
         data = self.read_all()
-        print(data)
+        print("data: %s" % data)
 
 
 if _HAS_PYSERIAL:

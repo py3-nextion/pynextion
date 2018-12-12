@@ -211,6 +211,18 @@ class CommandSucceeded(AbstractMsgEvent):
         cls.ensure_has_expected_first_byte(msg, code)
         return CommandSucceeded()
 
+class EventLaunched(AbstractMsgEvent):
+    EXPECTED_LENGTH = 4
+    FIRST_BYTE = Return.Code.EVENT_LAUNCHED
+
+    @classmethod
+    def parse(cls, msg):
+        ensure_has_end(msg)
+        cls.ensure_has_expected_length(msg)
+        code = Return.Code(msg[0])
+        cls.ensure_has_expected_first_byte(msg, code)
+        return EventLaunched()
+
 
 class EmptyMessage(AbstractMsgEvent):
     EXPECTED_LENGTH = 0
@@ -227,6 +239,7 @@ class EmptyMessage(AbstractMsgEvent):
 
 
 D_BYTE0_EVENT = {
+    Return.Code.EVENT_LAUNCHED.value: EventLaunched,
     Return.Code.CMD_FINISHED.value: CommandSucceeded,
     Return.Code.EVENT_TOUCH_HEAD.value: TouchEvent,
     Return.Code.CURRENT_PAGE_ID_HEAD.value: CurrentPageIDHeadEvent,
@@ -271,4 +284,4 @@ class MsgEvent():
                 if code in NEX_EXCEPTIONS:
                     raise NexMessageException(code)
                 else:
-                    return NotImplementedError()
+                    raise NotImplementedError()

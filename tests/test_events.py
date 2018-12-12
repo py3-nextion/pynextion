@@ -9,7 +9,8 @@ from pynextion.events import (
     StringHeadEvent,
     NumberHeadEvent,
     CommandSucceeded,
-    EmptyMessage
+    EmptyMessage,
+    EventLaunched
 )
 from pynextion.exceptions import NexMessageException
 from pynextion.constants import Return
@@ -38,6 +39,19 @@ def test_event_empty_message():
     evt = MsgEvent.parse(msg)
     assert isinstance(evt, EmptyMessage)
     assert evt.isempty()
+
+
+def test_event_launched():
+    msg = [0x88, 0xff, 0xff, 0xff]
+    # System successful start up
+    evt = MsgEvent.parse(msg)
+    assert isinstance(evt, EventLaunched)
+
+
+# def test_event_undef():
+#     msg = [0x00, 0x00, 0x00, 0xff, 0xff, 0xff]
+#     evt = MsgEvent.parse(msg)
+#     assert isinstance(evt, EventLaunched)
 
 
 def test_event_touchevent():
