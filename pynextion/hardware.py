@@ -51,6 +51,7 @@ class AbstractSerialNex:
             raise NotImplementedError("Undefined mode %s" % mode)
 
     def set_cmd_response_mode(self, mode):
+        assert isinstance(mode, Return.Mode), "Mode must be a Return.Mode enum"
         cmd = "bkcmd=%d" % mode.value
         return self.send(cmd)
 
