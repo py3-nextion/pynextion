@@ -1,10 +1,30 @@
-class NexException(Exception):
+class AbstractNexException(Exception):
     pass
 
 
-class NexNameException(NexException):
+class NexMessageException(AbstractNexException):
     pass
 
 
-class NexIdException(NexException):
+class NexMessageLengthException(NexMessageException):
+    pass
+
+
+class NexMessageEndException(NexMessageException):
+    pass
+
+
+class NexMessageFirstByteException(NexMessageException):
+    pass
+
+
+class NexComponentException(AbstractNexException):
+    pass
+
+
+class NexComponentNameException(AbstractNexException):
+    pass
+
+
+class NexComponentIdException(AbstractNexException):
     pass

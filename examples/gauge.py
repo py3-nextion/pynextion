@@ -10,6 +10,8 @@ from pynextion.constants import Colour
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
 def test_gauge(port):
     nexSerial = PySerialNex(port)
+    initialized = nexSerial.init()
+    assert initialized
 
     nexPage = NexPage(nexSerial, "pg_gauge", pid=10)
 

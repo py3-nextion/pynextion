@@ -1,5 +1,7 @@
 import time
+from .constants import Return
 from .events import (
+    MsgEvent,
     StringHeadEvent,
     NumberHeadEvent,
     CurrentPageIDHeadEvent
@@ -33,7 +35,24 @@ class AbstractSerialNex:
         return self.sp.write(cmd)
 
     def init(self):
-        return
+        # mode = Return.Mode.NO_RETURN
+        # mode = Return.Mode.SUCCESS_ONLY  # production setting
+        # mode = Return.Mode.FAIL_ONLY  # default screen setting
+        mode = Return.Mode.ALWAYS  # for debug
+        msg1 = self.set_cmd_response_mode(mode)
+        ret1 = MsgEvent.parse(msg1)
+        msg2 = self.send("page 0")
+        ret2 = MsgEvent.parse(msg2)
+        if mode in [Return.Mode.ALWAYS, Return.Mode.SUCCESS_ONLY]:
+            return ret1.issuccess() and ret2.issuccess()
+        elif mode in [Return.Mode.FAIL_ONLY, Return.Mode.NO_RETURN]:
+            return ret1.isempty() and ret2.isempty()
+        else:
+            raise NotImplementedError("Undefined mode %s" % mode)
+
+    def set_cmd_response_mode(self, mode):
+        cmd = "bkcmd=%d" % mode.value
+        return self.send(cmd)
 
     def reset(self):
         cmd = "rest"

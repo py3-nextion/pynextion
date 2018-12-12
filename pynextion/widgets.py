@@ -23,9 +23,9 @@ from .interfaces import (
 )
 
 from .exceptions import (
-    NexException,
-    NexNameException,
-    NexIdException
+    NexComponentException,
+    NexComponentNameException,
+    NexComponentIdException
 )
 
 
@@ -82,9 +82,9 @@ class NexPage(IWidget):
     def hook_widget(self, widget_type, name, cid=CID_DEFAULT):
         pid = self._nid.pid
         if name in self.D_WIDGETS_BY_NAME.keys():
-            raise NexNameException("name (%s) must be unique" % name)
+            raise NexComponentNameException("name (%s) must be unique" % name)
         if cid in self.D_WIDGETS_BY_CID.keys():
-            raise NexIdException("cid (%s) must be unique" % cid)
+            raise NexComponentIdException("cid (%s) must be unique" % cid)
         widget = widget_type(self._nid._nexserial, name, pid=pid, cid=cid)
         self.D_WIDGETS_BY_NAME[name] = widget
         self.D_WIDGETS_BY_CID[cid] = widget
@@ -96,9 +96,9 @@ class NexPage(IWidget):
         elif name is None and cid is not None:
             return self.D_WIDGETS_BY_CID[cid]
         elif name is not None and cid is not None:
-            raise NexException("name and cid shouldn't be defined both")
+            raise NexComponentException("name and cid shouldn't be defined both")
         else:
-            raise NexException("name or cid should be defined")
+            raise NexComponentException("name or cid should be defined")
 
     def to_dict(self):
         return {

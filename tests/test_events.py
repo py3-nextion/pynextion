@@ -1,3 +1,4 @@
+import pytest
 from pynextion.events import (
     Event,
     MsgEvent,
@@ -6,14 +7,37 @@ from pynextion.events import (
     PositionHeadEvent,
     SleepPositionHeadEvent,
     StringHeadEvent,
-    NumberHeadEvent
+    NumberHeadEvent,
+    CommandSucceeded,
+    EmptyMessage
 )
+from pynextion.exceptions import NexMessageException
 from pynextion.constants import Return
 from pynextion.int_tools import limits
 
 
 def test_event_touch_constants():
     assert Event.Touch.Press.value == 0x01
+
+
+def test_event_cmd_success():
+    msg = [0x01, 0xff, 0xff, 0xff]
+    evt = MsgEvent.parse(msg)
+    assert isinstance(evt, CommandSucceeded)
+    assert evt.issuccess()
+
+
+def test_event_cmd_error_invalid_page_id():
+    msg = [0x03, 0xff, 0xff, 0xff]
+    with pytest.raises(NexMessageException):
+        MsgEvent.parse(msg)
+
+
+def test_event_empty_message():
+    msg = []
+    evt = MsgEvent.parse(msg)
+    assert isinstance(evt, EmptyMessage)
+    assert evt.isempty()
 
 
 def test_event_touchevent():

@@ -1,6 +1,12 @@
 from enum import Enum
 import ctypes
 from .constants import Return
+from .exceptions import (
+    NexMessageException,
+    NexMessageEndException,
+    NexMessageLengthException,
+    NexMessageFirstByteException
+)
 
 
 class Event:
@@ -19,7 +25,7 @@ def has_end(msg):
 
 def ensure_has_end(msg):
     if not has_end(msg):
-        raise Exception("Message %r must end with 0xff 0xff 0xff" % msg)
+        raise NexMessageEndException("Message %r must end with 0xff 0xff 0xff" % msg)
 
 
 class AbstractMsgEvent:
@@ -31,13 +37,19 @@ class AbstractMsgEvent:
         expected_length = cls.EXPECTED_LENGTH
         n = len(msg)
         if expected_length is not None and n != expected_length:
-            raise Exception("Event message %r must have %d bytes not %d" % (msg, expected_length, n))
+            raise NexMessageLengthException("Event message %r must have %d bytes not %d" % (msg, expected_length, n))
 
     @classmethod
     def ensure_has_expected_first_byte(cls, msg, first_byte):
         expected_first_byte = cls.FIRST_BYTE
         if first_byte != expected_first_byte:
-            raise Exception("Event message %r must have %d as first byte not %d" % (msg, expected_first_byte, first_byte))
+            raise NexMessageFirstByteException("Event message %r must have %d as first byte not %d" % (msg, expected_first_byte, first_byte))
+    
+    def isempty(self):
+        return False
+
+    def issuccess(self):
+        return True
 
 
 class TouchEvent(AbstractMsgEvent):
@@ -187,7 +199,35 @@ class NumberHeadEvent(AbstractMsgEvent):
         return NumberHeadEvent(code, value, signed_value)
 
 
+class CommandSucceeded(AbstractMsgEvent):
+    EXPECTED_LENGTH = 4
+    FIRST_BYTE = Return.Code.CMD_FINISHED
+
+    @classmethod
+    def parse(cls, msg):
+        ensure_has_end(msg)
+        cls.ensure_has_expected_length(msg)
+        code = Return.Code(msg[0])
+        cls.ensure_has_expected_first_byte(msg, code)
+        return CommandSucceeded()
+
+
+class EmptyMessage(AbstractMsgEvent):
+    EXPECTED_LENGTH = 0
+    FIRST_BYTE = None
+
+    def __init__(self):
+        pass
+
+    def issuccess(self):
+        return False
+
+    def isempty(self):
+        return True
+
+
 D_BYTE0_EVENT = {
+    Return.Code.CMD_FINISHED.value: CommandSucceeded,
     Return.Code.EVENT_TOUCH_HEAD.value: TouchEvent,
     Return.Code.CURRENT_PAGE_ID_HEAD.value: CurrentPageIDHeadEvent,
     Return.Code.EVENT_POSITION_HEAD.value: PositionHeadEvent,
@@ -219,11 +259,16 @@ NEX_EXCEPTIONS = [
 class MsgEvent():
     @classmethod
     def parse(cls, msg):
-        first_byte = msg[0]
-        if first_byte in D_BYTE0_EVENT:
-            evt_typ = D_BYTE0_EVENT[first_byte]
-            return evt_typ.parse(msg)
+        if len(msg) == 0:
+            return EmptyMessage()
         else:
-            code = Return.Code(first_byte)
-            if code in NEX_EXCEPTIONS:
-                raise Exception(code)
+            first_byte = msg[0]
+            if first_byte in D_BYTE0_EVENT:
+                evt_typ = D_BYTE0_EVENT[first_byte]
+                return evt_typ.parse(msg)
+            else:
+                code = Return.Code(first_byte)
+                if code in NEX_EXCEPTIONS:
+                    raise NexMessageException(code)
+                else:
+                    return NotImplementedError()

@@ -3,7 +3,11 @@ from .objects import (
     PID_DEFAULT
 )
 from .widgets import NexPage
-from .exceptions import NexException, NexIdException, NexNameException
+from .exceptions import (
+    NexComponentException,
+    NexComponentIdException,
+    NexComponentNameException
+)
 from .factory import WidgetFactory
 
 
@@ -15,9 +19,9 @@ class NexComponents:
 
     def hook_page(self, name, pid=PID_DEFAULT):
         if name in self.D_PAGES_BY_NAME.keys():
-            raise NexNameException("name (%s) must be unique" % name)
+            raise NexComponentNameException("name (%s) must be unique" % name)
         if pid in self.D_PAGES_BY_PID.keys():
-            raise NexIdException("pid (%s) must be unique" % pid)
+            raise NexComponentIdException("pid (%s) must be unique" % pid)
         nexpage = NexPage(self.nexserial, name, pid)
         self.D_PAGES_BY_NAME[name] = nexpage
         self.D_PAGES_BY_PID[pid] = nexpage
@@ -29,9 +33,9 @@ class NexComponents:
         elif name is None and pid is not None:
             return self.D_PAGES_BY_PID[pid]
         elif name is not None and pid is not None:
-            raise NexException("name and pid shouldn't be defined both")
+            raise NexComponentException("name and pid shouldn't be defined both")
         else:
-            raise NexException("name or pid should be defined")
+            raise NexComponentException("name or pid should be defined")
 
     @property
     def pages(self):

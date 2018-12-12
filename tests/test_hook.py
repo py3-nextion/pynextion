@@ -1,7 +1,11 @@
 import pytest
 from pynextion.hardware import NexSerialMock
 from pynextion.widgets import NexText
-from pynextion.exceptions import NexException, NexIdException, NexNameException
+from pynextion.exceptions import (
+    NexComponentException,
+    NexComponentIdException,
+    NexComponentNameException
+)
 
 
 def test_hook_by_code():
@@ -19,7 +23,7 @@ def test_hook_by_code():
     returned_page = nexSerial.components.page(pid=pid)
     assert returned_page.name == pagename
     # can't get a page by both name and pid
-    with pytest.raises(NexException):
+    with pytest.raises(NexComponentException):
         nexSerial.components.page(name=pagename, pid=pid)
 
     # hook a widget (NexText) to a page
@@ -28,11 +32,11 @@ def test_hook_by_code():
     # nexText1.text = "Hello"
 
     # hooked widgets must have unique name or cid (into associated page)
-    with pytest.raises(NexNameException):
+    with pytest.raises(NexComponentNameException):
         page.hook_widget(NexText, "t1", cid=2)
     assert len(list(page.widgets)) == 1
 
-    with pytest.raises(NexIdException):
+    with pytest.raises(NexComponentIdException):
         page.hook_widget(NexText, "t2", cid=1)
     assert len(list(page.widgets)) == 1
 
@@ -47,7 +51,7 @@ def test_hook_by_code():
     widget = page.widget(cid=1)
     assert widget.name == "t1"
     # can't get a widget by both name and cid
-    with pytest.raises(NexException):
+    with pytest.raises(NexComponentException):
         page.widget(name="t1", cid=1)
 
     # hook a new page to nexSerial
@@ -55,11 +59,11 @@ def test_hook_by_code():
     assert len(list(nexSerial.components.pages)) == 2
 
     # page associated to nexserial must have unique name or cid (into associated page)
-    with pytest.raises(NexNameException):
+    with pytest.raises(NexComponentNameException):
         nexSerial.components.hook_page("pg_num", pid=8)
     assert len(list(nexSerial.components.pages)) == 2
 
-    with pytest.raises(NexIdException):
+    with pytest.raises(NexComponentIdException):
         nexSerial.components.hook_page("pg_num2", pid=7)
     assert len(list(nexSerial.components.pages)) == 2
 
