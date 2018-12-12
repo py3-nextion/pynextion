@@ -11,7 +11,7 @@ def test_raw(port):
     nexserial.write("page page1")
     print(nexserial.read_all())
 
-    nexserial.write("get page")
+    nexserial.write("sendme")
     time.sleep(0.1)
     print(nexserial.read_all())
 

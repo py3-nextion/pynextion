@@ -1,7 +1,8 @@
 import time
 from .events import (
     StringHeadEvent,
-    NumberHeadEvent
+    NumberHeadEvent,
+    CurrentPageIDHeadEvent
 )
 from .hook import (
     NexComponents
@@ -53,7 +54,8 @@ class AbstractSerialNex:
         return self.send(cmd)
 
     def get_nex_number_command(self, cmd, signed, bit_size):
-        evt = NumberHeadEvent.parse(self.send(cmd))
+        msg = self.send(cmd)
+        evt = NumberHeadEvent.parse(msg)
         if signed:
             return evt.signed_value
         else:
@@ -63,17 +65,26 @@ class AbstractSerialNex:
         return self.send(cmd)
 
     def get_nex_bool_command(self, cmd):
-        return bool(NumberHeadEvent.parse(self.send(cmd)).value)
+        msg = self.send(cmd)
+        value = NumberHeadEvent.parse(msg).value
+        return bool(value)
 
     def set_nex_bool_command(self, cmd):
         return self.send(cmd)
 
     @property
     def current_page(self):
-        return self.get_nex_number_command("get page", False, 32)
+        cmd = "sendme"
+        msg = self.send(cmd)
+        return CurrentPageIDHeadEvent.parse(msg).pid
 
     def close(self):
         return self.sp.close()
+
+    def poll(self):
+        print("poll")
+        data = self.read_all()
+        print(data)
 
 
 if _HAS_PYSERIAL:

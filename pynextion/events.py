@@ -9,13 +9,17 @@ class Event:
         Release = 0x00
 
 
+def hex_disp(msg):
+    return ''.join(['0x%x ' % b for b in msg])
+
+
 def has_end(msg):
     return msg[-1] == 0xff and msg[-2] == 0xff and msg[-3] == 0xff
 
 
 def ensure_has_end(msg):
     if not has_end(msg):
-        raise(Exception("Message must end with 0xff 0xff 0xff"))
+        raise Exception("Message %r must end with 0xff 0xff 0xff" % msg)
 
 
 class AbstractMsgEvent:
@@ -27,13 +31,13 @@ class AbstractMsgEvent:
         expected_length = cls.EXPECTED_LENGTH
         n = len(msg)
         if expected_length is not None and n != expected_length:
-            raise(Exception("Event message must have %d bytes not %d" % (expected_length, n)))
+            raise Exception("Event message %r must have %d bytes not %d" % (msg, expected_length, n))
 
     @classmethod
-    def ensure_has_expected_first_byte(cls, first_byte):
+    def ensure_has_expected_first_byte(cls, msg, first_byte):
         expected_first_byte = cls.FIRST_BYTE
         if first_byte != expected_first_byte:
-            raise(Exception("Event message must have %d as first byte not %d" % (expected_first_byte, first_byte)))
+            raise Exception("Event message %r must have %d as first byte not %d" % (msg, expected_first_byte, first_byte))
 
 
 class TouchEvent(AbstractMsgEvent):
@@ -56,7 +60,7 @@ class TouchEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         pid = int(msg[1])
         cid = int(msg[2])
         tevts = Event.Touch(msg[3])
@@ -79,7 +83,7 @@ class CurrentPageIDHeadEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         pid = int(msg[1])
         return CurrentPageIDHeadEvent(code, pid)
 
@@ -104,7 +108,7 @@ class PositionHeadEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         x = (msg[1] << 8) + msg[2]
         y = (msg[3] << 8) + msg[4]
         tevts = Event.Touch(msg[5])
@@ -131,7 +135,7 @@ class SleepPositionHeadEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         x = (msg[1] << 8) + msg[2]
         y = (msg[3] << 8) + msg[4]
         tevts = Event.Touch(msg[5])
@@ -154,7 +158,7 @@ class StringHeadEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         value = bytearray(msg[1:-3]).decode("utf-8")
         return StringHeadEvent(code, value)
 
@@ -177,7 +181,7 @@ class NumberHeadEvent(AbstractMsgEvent):
         ensure_has_end(msg)
         cls.ensure_has_expected_length(msg)
         code = Return.Code(msg[0])
-        cls.ensure_has_expected_first_byte(code)
+        cls.ensure_has_expected_first_byte(msg, code)
         value = msg[1] + (msg[2] << 8) + (msg[3] << 16) + (msg[4] << 24)
         signed_value = ctypes.c_int32(value).value
         return NumberHeadEvent(code, value, signed_value)
@@ -193,8 +197,33 @@ D_BYTE0_EVENT = {
 }
 
 
+NEX_EXCEPTIONS = [
+    Return.Code.INVALID_CMD,
+    Return.Code.CMD_FINISHED,
+    Return.Code.INVALID_COMPONENT_ID,
+    Return.Code.INVALID_PAGE_ID,
+    Return.Code.INVALID_PICTURE_ID,
+    Return.Code.INVALID_FONT_ID,
+    Return.Code.INVALID_BAUD,
+    Return.Code.INVALID_VARIABLE,
+    Return.Code.INVALID_OPERATION,
+    Return.Code.INVALID_ASSIGN,
+    Return.Code.INVALID_EEPROM,
+    Return.Code.INVALID_PARAMETER_QUANTITY,
+    Return.Code.INVALID_IO,
+    Return.Code.INVALID_ESC_CHAR,
+    Return.Code.INVALID_VAR_NAME_TOO_LONG
+]
+
+
 class MsgEvent():
     @classmethod
     def parse(cls, msg):
-        evt_typ = D_BYTE0_EVENT[msg[0]]
-        return evt_typ.parse(msg)
+        first_byte = msg[0]
+        if first_byte in D_BYTE0_EVENT:
+            evt_typ = D_BYTE0_EVENT[first_byte]
+            return evt_typ.parse(msg)
+        else:
+            code = Return.Code(first_byte)
+            if code in NEX_EXCEPTIONS:
+                raise Exception(code)
