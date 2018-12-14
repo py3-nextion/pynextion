@@ -44,7 +44,7 @@ class AbstractMsgEvent:
         expected_first_byte = cls.FIRST_BYTE
         if first_byte != expected_first_byte:
             raise NexMessageFirstByteException("Event message %r must have %d as first byte not %d" % (msg, expected_first_byte, first_byte))
-    
+
     def isempty(self):
         return False
 
@@ -210,6 +210,7 @@ class CommandSucceeded(AbstractMsgEvent):
         code = Return.Code(msg[0])
         cls.ensure_has_expected_first_byte(msg, code)
         return CommandSucceeded()
+
 
 class EventLaunched(AbstractMsgEvent):
     EXPECTED_LENGTH = 4

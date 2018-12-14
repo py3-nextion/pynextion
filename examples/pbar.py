@@ -3,7 +3,7 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexProgressBar
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
@@ -19,8 +19,8 @@ def test_progressbar(port):
 
     time.sleep(1)
 
-    nexProgressBar.backcolor = Colour.GRAY
-    nexProgressBar.forecolor = Colour.GREEN
+    nexProgressBar.backcolor = NamedColor.GRAY
+    nexProgressBar.forecolor = NamedColor.GREEN
     nexProgressBar.value = 30
 
     with pytest.raises(Exception):

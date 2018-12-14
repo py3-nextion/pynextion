@@ -3,7 +3,8 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexText
-from pynextion.constants import Colour, Alignment
+from pynextion.constants import Alignment
+from pynextion.color import NamedColor
 from pynextion.resources import Font
 
 
@@ -38,17 +39,17 @@ def test_text(port):
 
     time.sleep(0.5)
 
-    nexText.backcolor = Colour.BLUE
+    nexText.backcolor = NamedColor.BLUE
     nexText.text = "1"
 
     time.sleep(0.5)
 
-    nexText.backcolor = Colour.WHITE
+    nexText.backcolor = NamedColor.WHITE
     nexText.text = "2"
 
     time.sleep(0.5)
 
-    nexText.backcolor = Colour.RED
+    nexText.backcolor = NamedColor.RED
     nexText.text = "3"
 
     time.sleep(0.5)
@@ -58,7 +59,7 @@ def test_text(port):
     time.sleep(0.5)
 
     nexText.visible = False
-    nexText.backcolor = Colour.WHITE
+    nexText.backcolor = NamedColor.WHITE
 
     time.sleep(2)
 
@@ -68,7 +69,7 @@ def test_text(port):
 
     nexText.alignment.horizontal = Alignment.Horizontal.RIGHT
     nexText.alignment.vertical = Alignment.Vertical.DOWN
-    nexText.forecolor = Colour.BLUE
+    nexText.forecolor = NamedColor.BLUE
 
     # Change fontid from 0 to 1
     nexText.font = Font(1)

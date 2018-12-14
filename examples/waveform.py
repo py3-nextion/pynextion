@@ -3,7 +3,7 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexWaveform
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 import random
 import datetime
 
@@ -22,7 +22,7 @@ def test_waveform(port, delay):
 
     nexWaveform.grid.width = 20
     nexWaveform.grid.height = 20
-    nexWaveform.grid.color = Colour.GRAY
+    nexWaveform.grid.color = NamedColor.GRAY
 
     time.sleep(1)
 
@@ -33,7 +33,7 @@ def test_waveform(port, delay):
     nb_channels = 4
 
     channel = nexWaveform.channels[2]  # 0, 1, 2, 3
-    channel.color = Colour.RED
+    channel.color = NamedColor.RED
 
     # channel.append(123)  # values in 0:255 (add cid,chid,val)
     # channel.append(133)  # values in 0:255 (add)

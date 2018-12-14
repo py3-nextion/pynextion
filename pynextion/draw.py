@@ -1,7 +1,10 @@
 from .constants import (
     Background,
-    Colour,
     Alignment,
+)
+from .color import (
+    NamedColor,
+    Color,
     BACKCOLOR_DEFAULT,
     FORECOLOR_DEFAULT
 )
@@ -11,9 +14,11 @@ from .int_tools import assert_integers_in_range
 
 def _init_colour(colour):
     if colour is None:
-        return Colour.NONE.value
+        return NamedColor.NONE
+    elif isinstance(colour, Color):
+        return colour
     else:
-        return colour.value
+        raise NotImplementedError()
 
 
 def cls(nexSerial, colour=None):
@@ -49,11 +54,11 @@ def rectangle(nexSerial, x1, y1, x2, y2, colour=None, mode=Background.NOBACKCOLO
     assert_integers_in_range((x1, y1, x2, y2), False, 16)  # uint16
     colour = _init_colour(colour)
     if mode == Background.NOBACKCOLOUR:
-        return nexSerial.send("draw %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour))
+        return nexSerial.send("draw %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour.value))
     elif mode == Background.SOLIDCOLOUR:
         w = x2 - x1
         h = y2 - y1
-        return nexSerial.send("fill %s,%s,%s,%s,%s" % (x1, y1, w, h, colour))
+        return nexSerial.send("fill %s,%s,%s,%s,%s" % (x1, y1, w, h, colour.value))
     else:
         raise(Exception("Unsupported $mode"))
 
@@ -72,9 +77,9 @@ def circle(nexSerial, x, y, r, colour=None, mode=Background.NOBACKCOLOUR):
     assert_integers_in_range((x, y, r), False, 16)  # uint16
     colour = _init_colour(colour)
     if mode == Background.NOBACKCOLOUR:
-        return nexSerial.send("cir %s,%s,%s,%s" % (x, y, r, colour))
+        return nexSerial.send("cir %s,%s,%s,%s" % (x, y, r, colour.value))
     elif mode == Background.SOLIDCOLOUR:
-        return nexSerial.send("cirs %s,%s,%s,%s" % (x, y, r, colour))
+        return nexSerial.send("cirs %s,%s,%s,%s" % (x, y, r, colour.value))
     else:
         raise(Exception("Unsupported $mode"))
 
@@ -104,7 +109,7 @@ def xstr(nexSerial, s, x, y, w, h,
     xcenter = xcenter.value
     ycenter = ycenter.value
     sta = sta.value
-    return nexSerial.send("xstr %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\"%s\"" % (x, y, w, h, fontid, fontcolor, backcolor, xcenter, ycenter, sta, s))
+    return nexSerial.send("xstr %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\"%s\"" % (x, y, w, h, fontid, fontcolor.value, backcolor.value, xcenter, ycenter, sta, s))
 
 
 def line(nexSerial, x1, y1, x2, y2, colour=None):
@@ -114,7 +119,7 @@ def line(nexSerial, x1, y1, x2, y2, colour=None):
     """
     assert_integers_in_range((x1, y1, x2, y2), False, 16)  # uint16
     colour = _init_colour(colour)
-    return nexSerial.send("line %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour))
+    return nexSerial.send("line %s,%s,%s,%s,%s" % (x1, y1, x2, y2, colour.value))
 
 
 def picture(nexSerial, x, y, pic, w=None, h=None, x0=None, y0=None):

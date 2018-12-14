@@ -4,7 +4,7 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexGauge
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
@@ -19,8 +19,8 @@ def test_gauge(port):
 
     nexPage.show()
 
-    nexGauge.backcolor = Colour.WHITE
-    nexGauge.forecolor = Colour.RED
+    nexGauge.backcolor = NamedColor.WHITE
+    nexGauge.forecolor = NamedColor.RED
 
     nexGauge.width = 3  # 0-5
     # nexGauge.pointer.width = 3  # 0-5

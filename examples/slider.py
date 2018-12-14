@@ -4,7 +4,7 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexSlider
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 
 
 @pytest.mark.parametrize("port", [PORT_DEFAULT])
@@ -24,8 +24,8 @@ def test_slider(port):
 
     time.sleep(1)
 
-    # nexSlider.cursor.color = Colour.GRAY
-    nexSlider.forecolor = Colour.GRAY
+    # nexSlider.cursor.color = NamedColor.GRAY
+    nexSlider.forecolor = NamedColor.GRAY
 
     time.sleep(1)
 

@@ -3,11 +3,11 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexNumber
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 from pynextion.int_tools import limits
 
 
-def sign_color(value, color1=Colour.GREEN, color2=Colour.RED):
+def sign_color(value, color1=NamedColor.GREEN, color2=NamedColor.RED):
     if value >= 0:
         return color1
     else:
@@ -30,14 +30,14 @@ def test_number(port):
     time.sleep(1)
     n = 2
     nexNumber.value = n
-    nexNumber.backcolor = Colour.RED
-    nexNumber.forecolor = Colour.WHITE
+    nexNumber.backcolor = NamedColor.RED
+    nexNumber.forecolor = NamedColor.WHITE
 
     time.sleep(1)
     assert nexNumber.value == n
     time.sleep(1)
     nexNumber.value = 3
-    nexNumber.backcolor = Colour.WHITE
+    nexNumber.backcolor = NamedColor.WHITE
     nexNumber.forecolor = sign_color(n)
     time.sleep(1)
 

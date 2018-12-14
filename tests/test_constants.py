@@ -3,7 +3,6 @@ from pynextion.constants import (
     Return,
     Alignment,
     Background,
-    Colour,
     Scroll,
     Format,
     Baudrate
@@ -26,10 +25,6 @@ def test_constants_alignement():
 
 def test_constants_background():
     assert Background.IMAGE.value == 2
-
-
-def test_constants_colour():
-    assert Colour.RED.value == 63488
 
 
 def test_constants_scroll():

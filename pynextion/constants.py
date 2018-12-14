@@ -60,22 +60,6 @@ class Background(Enum):
     NOBACKCOLOUR = 3  # No backcolour
 
 
-class Colour(Enum):
-    NONE = -1
-    BLACK = 0
-    WHITE = 65535
-    RED = 63488
-    GREEN = 2016
-    BLUE = 31
-    GRAY = 33840
-    BROWN = 48192
-    YELLOW = 65504
-
-
-BACKCOLOR_DEFAULT = Colour.WHITE
-FORECOLOR_DEFAULT = Colour.BLACK
-
-
 class Scroll:
     class Direction(Enum):
         NONE = -1
