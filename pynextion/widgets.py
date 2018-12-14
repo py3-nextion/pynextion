@@ -205,8 +205,8 @@ class NexWaveformGrid(IWidget, NxInterface):
         return self._get_nex_number_property("gdc")
 
     @color.setter
-    def color(self, value):
-        self._set_nex_number_property("gdc", value)
+    def color(self, new_color):
+        self._set_nex_number_property("gdc", new_color.value)
 
 
 class NexWaveform(IWidget, IViewable, IColourable, ITouchable):
