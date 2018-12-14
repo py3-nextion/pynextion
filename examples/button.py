@@ -3,7 +3,7 @@ from .config import PORT_DEFAULT
 import time
 from pynextion import PySerialNex
 from pynextion.widgets import NexPage, NexButton, NexNumber
-from pynextion.constants import Colour
+from pynextion.color import NamedColor
 import datetime
 
 
@@ -22,8 +22,8 @@ def test_button(port, delay):
 
     nexPage.show()
 
-    nexButtonPlus.backcolor = Colour.GREEN
-    nexButtonMinus.backcolor = Colour.RED
+    nexButtonPlus.backcolor = NamedColor.GREEN
+    nexButtonMinus.backcolor = NamedColor.RED
 
     # nexNumber0.value = value
     value = nexNumber0.value

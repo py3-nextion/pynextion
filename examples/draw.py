@@ -37,7 +37,7 @@ def test_draw(port):
 
     cls(nexSerial, DEFAULT_COLOUR)
 
-    def print_several_lines(nexSerial, lcd_width=LCD_WIDTH, color1="WHITE", color2="BLACK"):
+    def print_several_lines(nexSerial, lcd_width=LCD_WIDTH, color1=NamedColor.WHITE, color2=NamedColor.BLACK):
         def swap(x, y):
             return y, x
 

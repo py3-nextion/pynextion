@@ -37,7 +37,7 @@ def cls(nexSerial, colour=None):
     >>> cls(nexSerial)
     """
     colour = _init_colour(colour)
-    return nexSerial.send("cls %s" % colour)
+    return nexSerial.send("cls %s" % colour.value)
 
 
 def rectangle(nexSerial, x1, y1, x2, y2, colour=None, mode=Background.NOBACKCOLOUR):
